@@ -23,7 +23,7 @@ class Meow extends Component {
 		return(
 			<div>
 				<h3>Sesh Builder</h3>
-				<p>Where the sesh builds you</p>
+				<p>Where you build the sesh & the sesh builds you</p>
 			</div>
 		);
 	}
@@ -33,30 +33,30 @@ class App extends Component {
 	render() {
 		return (
 			<Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-          </ul>
-        </nav>
+		      <div>
+		        <nav>
+		          <ul>
+		            <li>
+		              <Link to="/">Home</Link>
+		            </li>
+		            {/*<li>
+		              <Link to="/about">About</Link>
+		            </li>
+		            <li>
+		              <Link to="/users">Users</Link>
+		            </li>*/}
+		          </ul>
+		        </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/">
-            <Meow />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+	        {/* A <Switch> looks through its children <Route>s and
+	            renders the first one that matches the current URL. */}
+		        <Switch>
+		          <Route path="/">
+		            <Meow />
+		          </Route>
+		        </Switch>
+		      </div>
+    		</Router>
 		);
 	}
 
