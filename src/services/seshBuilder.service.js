@@ -1,8 +1,12 @@
-import http from "../http-common";
+import axs from "../http-common";
 
 class SeshBuilderDataService {
 	getAll() {
-		return http.get("/pose");
+		const token = axs.defaults.headers.common.Authorization;
+		const config = {
+			headers: { Authorization: `Token ${token}` }
+		};
+		return axs.get("/api/pose", config);
 	}
 }
 

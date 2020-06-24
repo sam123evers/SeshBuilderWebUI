@@ -1,23 +1,26 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-//import "boostrap/dist/css/bootstrap.min.css";
+import {BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory, useLocation} from "react-router-dom";
 import "./App.css";
 import SeshBuilderDataService from "./services/seshBuilder.service";
+import axs from "./http-common";
 
-class Meow extends Component {
+
+class Home extends Component {
+	
 	getPoseList() {
-    SeshBuilderDataService.getAll()
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
+	    SeshBuilderDataService.getAll()
+	      .then(response => {
+	        console.log(response.data);
+	      })
+	      .catch(e => {
+	        console.log(e);
+	      });
+ 	}
 
-  componentWillMount() {
-  	this.getPoseList();
-  }
+    componentWillMount() {
+  	  this.getPoseList();
+    }
+  
 
 	render() {
 		return(
@@ -29,37 +32,65 @@ class Meow extends Component {
 	}
 }
 
+class Auth extends Component {
+	constructor(props){
+		super(props);
+
+		this.state = {
+			isAuthenticated: false
+		}
+	}
+
+	authenticate() {
+		axs.post("/api-token-auth/", {
+	   		username: "samevers",
+	   		password: "MeowMix86"
+	   	}).then((res) => {
+	   		if(res.status === 200) {
+	   			this.setState({isAuthenticated: true});
+	   			axs.defaults.headers.common['Authorization'] = res.data.token;
+	   			this.props.history.push("/home")
+	   		}
+   		
+	   	}).catch((err) => {
+	   		console.log(err);
+	   	})
+
+	}
+
+	render() {
+		return (
+			<div>
+				Auth
+				<button onClick={() => this.authenticate()}>login</button>
+			</div>
+		);
+	}
+}
+
+
+
 class App extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			isAuthenticated: false
+		}
+	}
 	render() {
 		return (
 			<Router>
 		      <div>
-		        <nav>
-		          <ul>
-		            <li>
-		              <Link to="/">Home</Link>
-		            </li>
-		            {/*<li>
-		              <Link to="/about">About</Link>
-		            </li>
-		            <li>
-		              <Link to="/users">Users</Link>
-		            </li>*/}
-		          </ul>
-		        </nav>
-
-	        {/* A <Switch> looks through its children <Route>s and
-	            renders the first one that matches the current URL. */}
 		        <Switch>
-		          <Route path="/">
-		            <Meow />
-		          </Route>
+		            <Route path="/login" component={Auth}/>
+		    
+		          	<Route path="/home" component={Home}/>
 		        </Switch>
 		      </div>
     		</Router>
 		);
-	}
-
+	};
 }
 
 export default App;
