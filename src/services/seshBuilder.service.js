@@ -6,7 +6,7 @@ class SeshBuilderDataService {
 		const config = {
 			headers: { Authorization: `Token ${token}` }
 		};
-		return axs.get("/api/pose", config);
+		return axs.get("/pose", config);
 	}
 }
 

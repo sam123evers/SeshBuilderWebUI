@@ -37,14 +37,26 @@ class Auth extends Component {
 		super(props);
 
 		this.state = {
-			isAuthenticated: false
+			username: "",
+			password: ""
 		}
+
+		this.handleChangeUsername = this.handleChangeUsername.bind(this);
+		this.handleChangePassword = this.handleChangePassword.bind(this);
 	}
 
-	authenticate() {
+	handleChangeUsername(e) {
+		this.setState({username: e.target.value});
+	}
+
+	handleChangePassword(e) {
+		this.setState({password: e.target.value});
+	}
+
+	useCredsGetToken() {
 		axs.post("/api-token-auth/", {
-	   		username: "samevers",
-	   		password: "MeowMix86"
+	   		username: this.state.username,
+	   		password: this.state.password
 	   	}).then((res) => {
 	   		if(res.status === 200) {
 	   			this.setState({isAuthenticated: true});
@@ -55,14 +67,17 @@ class Auth extends Component {
 	   	}).catch((err) => {
 	   		console.log(err);
 	   	})
-
 	}
 
 	render() {
 		return (
 			<div>
-				Auth
-				<button onClick={() => this.authenticate()}>login</button>
+				Get Auth Token
+				<form>
+					<input id="inputUsername" value={this.state.username} type="text" placeholder="username..." onChange={this.handleChangeUsername}/>
+					<input id="inputPassword" value={this.state.password} type="text" placeholder="password..." onChange={this.handleChangePassword} />
+				</form>
+				<button onClick={() => this.useCredsGetToken()}>Get Token</button>
 			</div>
 		);
 	}
@@ -75,7 +90,7 @@ class App extends Component {
 		super(props);
 
 		this.state = {
-			isAuthenticated: false
+			isCashed: true
 		}
 	}
 	render() {
@@ -83,9 +98,8 @@ class App extends Component {
 			<Router>
 		      <div>
 		        <Switch>
-		            <Route path="/login" component={Auth}/>
-		    
 		          	<Route path="/home" component={Home}/>
+		          	<Route path="/" component={Auth}/>
 		        </Switch>
 		      </div>
     		</Router>
