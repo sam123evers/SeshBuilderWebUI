@@ -1,16 +1,24 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import "./App.css";
 import PoseDataService from "./services/seshBuilder.service";
 import axs from "./http-common";
 
 
 class Main extends Component {
+	constructor(props){
+		super(props);
+
+		this.state = {
+			poseList: []
+		}
+	}
+
 	
 	getPoseList() {
 	    PoseDataService.getAll()
 	      .then(response => {
-	        console.log(response.data);
+	        this.setState({poseList: response.data})
 	      })
 	      .catch(e => {
 	        console.log(e);
@@ -27,6 +35,13 @@ class Main extends Component {
 			<div>
 				<h3>Sesh Builder</h3>
 				<p>Where you build the sesh & the sesh builds you</p>
+				<ul>
+					{
+						this.state.poseList.map((pose) => {
+							return<li key={pose.name}>{pose.name}</li>
+						})
+					}
+				</ul>
 			</div>
 		);
 	}
@@ -37,6 +52,7 @@ class Login extends Component {
 		super(props);
 
 		this.state = {
+			isAuthentcated: false,
 			username: "",
 			password: ""
 		}
@@ -77,7 +93,21 @@ class Login extends Component {
 					<input id="inputUsername" value={this.state.username} type="text" placeholder="username..." onChange={this.handleChangeUsername}/>
 					<input id="inputPassword" value={this.state.password} type="text" placeholder="password..." onChange={this.handleChangePassword} />
 				</form>
-				<button onClick={() => this.useCredsGetToken()}>Get Token</button>
+				<button onClick={() => this.useCredsGetToken()}>Login</button>
+			</div>
+		);
+	}
+}
+
+class Splash extends Component {
+	render() {
+		return(
+			<div className="splash-main">
+				<h1 className="title">Sesh Builder</h1>
+				<div className="nav">
+					<Link to="/signup">Sign Up</Link>
+					<Link to="/login">Log In</Link>
+				</div>
 			</div>
 		);
 	}
@@ -123,6 +153,8 @@ class SignUp extends Component {
 			password2: this.state.pwd_confirm
 		}).then((res) => {
 			console.log(res);
+			alert("you created a new user with name " + res.data.username + " sign in with this username and password you created on the login page");
+			this.props.history.push("/login");
 		}).catch((err) => {
 			console.log(err);
 		})
@@ -159,6 +191,7 @@ class App extends Component {
 		        	<Route path="/signup" component={SignUp}/>
 		          	<Route path="/main" component={Main}/>
 		          	<Route path="/login" component={Login}/>
+		          	<Route path="/" component={Splash} />
 		        </Switch>
 		      </div>
     		</Router>
