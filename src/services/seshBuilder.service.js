@@ -1,6 +1,6 @@
 import axs from "../http-common";
 
-class SeshBuilderDataService {
+class PoseDataService {
 	getAll() {
 		const token = axs.defaults.headers.common.Authorization;
 		const config = {
@@ -10,4 +10,4 @@ class SeshBuilderDataService {
 	}
 }
 
-export default new SeshBuilderDataService();
+export default new PoseDataService();
